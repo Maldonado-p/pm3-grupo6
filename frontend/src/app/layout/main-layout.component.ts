@@ -1,7 +1,8 @@
-import { Component, Inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-main-layout',
@@ -9,9 +10,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   imports: [RouterOutlet, HeaderComponent, CommonModule],
   template: `
     <div class="d-flex flex-column vh-100">
-      <!-- Mostra header apenas quando estiver no browser e autenticado -->
       <app-header *ngIf="isBrowser && isAuthenticated()"></app-header>
-
       <main [class.mt-4]="isBrowser && isAuthenticated()" class="flex-fill container">
         <router-outlet></router-outlet>
       </main>
@@ -20,14 +19,15 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 })
 export class MainLayoutComponent {
   isBrowser: boolean;
-  isAuthenticated = signal(false);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private keycloak: KeycloakService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    
-    // Só verifica autenticação no browser
-    if (this.isBrowser) {
-      this.isAuthenticated.set(!!localStorage.getItem('token'));
-    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.isBrowser ? this.keycloak.isLoggedIn() : false;
   }
 }

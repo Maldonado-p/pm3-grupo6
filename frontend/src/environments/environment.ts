@@ -1,3 +1,3 @@
 export const environment = {
-    SERVIDOR: "http://backend:8080"
+    SERVIDOR: "https://sistema1.net"
 }

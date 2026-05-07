@@ -56,7 +56,7 @@ public class SecurityConfig {
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
         .oauth2ResourceServer(oauth2 -> oauth2
-            .jwt(jwt -> jwt.jwkSetUri("http://192.168.100.15:8080/realms/zadinventory/protocol/openid-connect/certs"))
+            .jwt(jwt -> jwt.jwkSetUri("http://192.168.1.15:8080/realms/zadinventory/protocol/openid-connect/certs"))
         );
 
     return http.build();
