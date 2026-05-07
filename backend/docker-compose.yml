@@ -5,7 +5,15 @@ services:
     restart: always
     network_mode: host
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.100.15:3306/zadinventory?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.1.15:3306/zadinventory?useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: banco
       SPRING_DATASOURCE_PASSWORD: senhabanco
       JWT_SECRET: VBqK71MGg987AxESNKqd9pFDKow+F9rr/oMvMxZqWYQ=
+      SERVER_PORT: 8443
+      SERVER_SSL_ENABLED: true
+      SERVER_SSL_KEY_STORE: /opt/ssl/keystore.p12
+      SERVER_SSL_KEY_STORE_PASSWORD: senha
+      SERVER_SSL_KEY_STORE_TYPE: PKCS12
+      SERVER_SSL_KEY_ALIAS: tomcat
+    volumes:
+      - /opt/backend/ssl:/opt/ssl
