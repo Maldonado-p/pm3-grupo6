@@ -10,12 +10,13 @@ export function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://192.168.1.15:8080',
+        url: 'https://sistema1.net',
         realm: 'zadinventory',
         clientId: 'zadinventory-frontend',
       },
       initOptions: {
-        onLoad: 'login-required',
+      onLoad: 'login-required',
+      checkLoginIframe: false,
       },
     });
 }

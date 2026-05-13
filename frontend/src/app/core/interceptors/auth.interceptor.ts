@@ -1,18 +1,19 @@
-// src/app/core/interceptors/auth.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { KeycloakService } from 'keycloak-angular';
+import { from, switchMap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.getToken();
-
-  if (token) {
-    const cloned = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`)
-    });
-    return next(cloned);
-  }
-
-  return next(req);
+  const keycloak = inject(KeycloakService);
+  return from(keycloak.getToken()).pipe(
+    switchMap(token => {
+      if (token) {
+        const cloned = req.clone({
+          headers: req.headers.set('Authorization', `Bearer ${token}`)
+        });
+        return next(cloned);
+      }
+      return next(req);
+    })
+  );
 };
